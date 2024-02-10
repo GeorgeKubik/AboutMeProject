@@ -59,22 +59,22 @@ window.addEventListener('DOMContentLoaded', () => {
 				if (state.experience) {
 					hideContent(experience);
 					changeContentBtn(btn);
-					checkHightContent(mainContent);
+					checkHeightContent(mainContent);
 				} else {
 					showContent(experience);
 					changeContentBtn(btn);
-					checkHightContent(mainContent);
+					checkHeightContent(mainContent);
 				}
 				state.experience = !state.experience;
 			} else if (target && target.classList.contains('btn-skills')) {
 				if (state.skills) {
 					hideContent(skills);
 					changeContentBtn(btn);
-					checkHightContent(mainContent);
+					checkHeightContent(mainContent);
 				} else {
 					showContent(skills);
 					changeContentBtn(btn);
-					checkHightContent(mainContent);
+					checkHeightContent(mainContent);
 				}
 				state.skills = !state.skills;
 			}
@@ -98,14 +98,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-	function checkHightContent(content) {
+	function checkHeightContent(content) {
 		if (content.offsetHeight >= 834) {
 			content.style.paddingBottom = '30px';
 		} else {
 			content.style.paddingBottom = '0px';
 		}
 	}
-	checkHightContent(mainContent);
+	checkHeightContent(mainContent);
 
 });
 

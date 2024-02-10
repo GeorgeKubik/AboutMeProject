@@ -55,22 +55,22 @@ $(document).ready(function () {
 				if (state.experience) {
 					hideContent($experience);
 					changeContentBtn($btn);
-					checkHightContent();
+					checkHeightContent();
 				} else {
 					showContent($experience);
 					changeContentBtn($btn);
-					checkHightContent();
+					checkHeightContent();
 				}
 				state.experience = !state.experience;
 			} else if ($target.hasClass('btn-skills')) {
 				if (state.skills) {
 					hideContent($skills);
 					changeContentBtn($btn);
-					checkHightContent();
+					checkHeightContent();
 				} else {
 					showContent($skills);
 					changeContentBtn($btn);
-					checkHightContent();
+					checkHeightContent();
 				}
 				state.skills = !state.skills;
 			}
@@ -91,12 +91,12 @@ $(document).ready(function () {
 		}
 	});
 
-	function checkHightContent() {
+	function checkHeightContent() {
 		if ($mainContent.outerHeight() >= 834) {
 			$mainContent.css('paddingBottom', '30px');
 		} else {
 			$mainContent.css('paddingBottom', '0px');
 		}
 	}
-	checkHightContent();
+	checkHeightContent();
 });
