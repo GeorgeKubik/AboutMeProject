@@ -458,7 +458,7 @@ legend {
 	color: var(--navigation-text-color);
 	border-bottom: 4px solid rgba(0, 0, 0, 0);
 	padding-bottom: 8px;
-	transition: ease-in-out 0.2s;
+	transition: all 0.2s;
 }
 @media (max-width: 374px) {
 	.navigation__link {
