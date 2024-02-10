@@ -1,102 +1,114 @@
 $(document).ready(function () {
 	'use strict';
 
-	const $navigationList = $('.navigation__list');
-	const $mainContent = $('.main__content');
+	const navigationList = $('.navigation__list');
+	const navigationItems = $('.navigation__link');
+	const mainSection = $('.main__content-block');
+	const mainContent = $('.main__content');
 
-	async function viewHtmlContent(url) {
-		try {
-			const response = await fetch(url);
-			const html = await response.text();
-			$mainContent.html(html);
-			const $btn = $mainContent.find('.main__btn');
-			const $cardsSkills = $mainContent.find('.main__skills-card');
-			const $cardsExperience = $mainContent.find('.main__experience-card');
-			getElementContent($btn, $cardsSkills, $cardsExperience);
+	const experienceCards = $('.main__experience-card');
+	const skillsCards = $('.main__skills-card');
+	const btnShowCards = $('.main__btn');
 
-		} catch (error) {
-			console.log('Ошибка при загрузке содержимого:', error);
-		}
+	function hideContent() {
+		mainSection.addClass('hide').removeClass('show fade');
 	}
-	viewHtmlContent('../about.html');
 
-	function hideContent($content) {
-		$content.each((i, item) => {
-			if (i >= 2) $(item).css('display', 'none');
+	function showContent(i = 0) {
+		mainSection.eq(i).addClass('show fade').removeClass('hide');
+	}
+
+	function setRegularText() {
+		navigationItems.removeClass('navigation__link_bold');
+	}
+
+	function setBoldText(i = 0) {
+		navigationItems.eq(i).addClass('navigation__link_bold');
+	}
+
+	hideContent();
+	showContent();
+	setRegularText();
+	setBoldText();
+
+	navigationList.on('click', '.navigation__link', function () {
+		let target = $(this);
+		navigationItems.each(function (i) {
+			if (target.is($(this))) {
+				hideContent();
+				showContent(i);
+				setRegularText();
+				setBoldText(i);
+			}
+		});
+	});
+
+	function rollUpBlock(block) {
+		block.each(function (i) {
+			if (i >= 2) {
+				$(this).css('display', 'none').removeClass('fade');
+			}
 		});
 	}
 
-	function showContent($content) {
-		$content.css('display', 'block');
+	function expandBlock(block) {
+		block.css('display', 'block').addClass('fade');
 	}
 
-	function changeContentBtn($btn) {
-		if ($btn.text() === 'Показать полностью') {
-			$btn.text('Свернуть');
+	function changeTextBtn(btnText) {
+		if (btnText.text() === 'Показать полностью') {
+			btnText.text('Свернуть');
 		} else {
-			$btn.text('Показать полностью');
+			btnText.text('Показать полностью');
 		}
 	}
 
-	function getElementContent($btn, $skills, $experience) {
+	function checkHeightContent(content, rollup = false) {
+		if (content.height() >= 834 && rollup) {
+			content.css('paddingBottom', '30px');
+		} else {
+			content.css('paddingBottom', '0px');
+		}
+	}
+	checkHeightContent(mainContent);
+
+	function getElementContent(btns, skills, experience, mainContent) {
 		const state = {
 			skills: false,
 			experience: false,
 		};
 
-		hideContent($skills);
-		hideContent($experience);
+		rollUpBlock(skills);
+		rollUpBlock(experience);
 
-		if ($btn.length === 0) return;
-
-		$btn.on('click', function () {
-			let $target = $(this);
-			if ($target.hasClass('btn-experience')) {
-				if (state.experience) {
-					hideContent($experience);
-					changeContentBtn($btn);
-					checkHeightContent();
-				} else {
-					showContent($experience);
-					changeContentBtn($btn);
-					checkHeightContent();
+		btns.each(function () {
+			$(this).on('click', function () {
+				let target = $(this);
+				if (target.hasClass('btn-experience')) {
+					if (state.experience) {
+						rollUpBlock(experience);
+						changeTextBtn(target);
+						checkHeightContent(mainContent, false);
+					} else {
+						expandBlock(experience);
+						changeTextBtn(target);
+						checkHeightContent(mainContent, true);
+					}
+					state.experience = !state.experience;
+				} else if (target.hasClass('btn-skills')) {
+					if (state.skills) {
+						rollUpBlock(skills);
+						changeTextBtn(target);
+						checkHeightContent(mainContent, false);
+					} else {
+						expandBlock(skills);
+						changeTextBtn(target);
+						checkHeightContent(mainContent, true);
+					}
+					state.skills = !state.skills;
 				}
-				state.experience = !state.experience;
-			} else if ($target.hasClass('btn-skills')) {
-				if (state.skills) {
-					hideContent($skills);
-					changeContentBtn($btn);
-					checkHeightContent();
-				} else {
-					showContent($skills);
-					changeContentBtn($btn);
-					checkHeightContent();
-				}
-				state.skills = !state.skills;
-			}
+			});
 		});
 	}
-
-	$navigationList.on('click', '.navigation__link', function () {
-		let $target = $(this);
-		$('.navigation__link').removeClass('navigation__link_bold');
-		$target.addClass('navigation__link_bold');
-
-		if ($target.hasClass('about')) {
-			viewHtmlContent('../about.html');
-		} else if ($target.hasClass('experience')) {
-			viewHtmlContent('../experience.html');
-		} else if ($target.hasClass('skills')) {
-			viewHtmlContent('../skills.html');
-		}
-	});
-
-	function checkHeightContent() {
-		if ($mainContent.outerHeight() >= 834) {
-			$mainContent.css('paddingBottom', '30px');
-		} else {
-			$mainContent.css('paddingBottom', '0px');
-		}
-	}
-	checkHeightContent();
+	getElementContent(btnShowCards, skillsCards, experienceCards, mainContent);
 });
